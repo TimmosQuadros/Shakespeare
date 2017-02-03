@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -27,13 +26,30 @@ public class Sorting {
 		//		s.printArray(wordList);
 
 		//Test merge two arrays
-		ArrayList<String> a = s.addRandomLettersToArrayList(2);
-		ArrayList<String> b = s.addRandomLettersToArrayList(2);
-		s.printArray(a);
-		s.printArray(b);
-		ArrayList<String> ab_merge = s.merge(a, b);
-		s.printArray(ab_merge);
+		//		ArrayList<String> a = s.addRandomLettersToArrayList(3);
+		//		s.insertionSort(a);
+		//		ArrayList<String> b = s.addRandomLettersToArrayList(1);
+		//		s.insertionSort(b);
+		//		s.printArray(a);
+		//		s.printArray(b);
+		//		ArrayList<String> ab_merge = s.merge(a, b);
+		//		s.printArray(ab_merge);
 
+		ArrayList<String> wordList = new ArrayList<>();
+
+		String[] alphabetSorted = /*{"to","be","or","not","to","be","that","is","the","question"};*/{"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
+
+		for (int i = 0; i < alphabetSorted.length; i++) {
+			wordList.add(alphabetSorted[i]);
+		}
+
+		s.scrambleArray(wordList);
+
+		s.printArray(wordList);
+
+		wordList= s.mergeSort(wordList);
+
+		s.printArray(wordList);
 
 	}
 
@@ -75,25 +91,43 @@ public class Sorting {
 
 	public ArrayList<String> mergeSort(ArrayList<String> wordList){
 
-		return wordList;
+		if(wordList.size()<=1){
+			return wordList;
+		}
+
+		ArrayList<String> left = new ArrayList<>();
+		ArrayList<String> right = new ArrayList<>();
+
+		for (int i = 0; i < wordList.size(); i++) {
+			if(i<(wordList.size())/2){
+				left.add(wordList.get(i));
+			}else{
+				right.add(wordList.get(i));
+			}
+		}
+		left = mergeSort(left);
+		right = mergeSort(right);
+
+		return merge(left,right);
 	}
 
 	private ArrayList<String> merge(ArrayList<String> a,ArrayList<String> b){
 		ArrayList<String> res = new ArrayList<>();
-		int a_index=0;
-		int b_index=0;
-		while(a_index<a.size() && b_index<b.size()){
-			System.out.println("abe");
-			if(a.get(a_index).compareTo(b.get(b_index))<0){
-				res.add(a.get(a_index));
-				if(a_index!=a.size()){
-					a_index++;
-				}
-			}else{
-				res.add(b.get(b_index));
-				if(b_index!=b.size()){
-					b_index++;
-				}
+		while(!(a.isEmpty() && b.isEmpty())){
+			if(!a.isEmpty() && !b.isEmpty()){
+				if(a.get(0).compareTo(b.get(0))<0){
+					res.add(a.get(0));
+					a.remove(0);
+				}else if(!b.isEmpty()){
+					res.add(b.get(0));
+					b.remove(0);
+				}	
+			}else if(a.isEmpty() && !b.isEmpty()){
+				res.add(b.get(0));
+				b.remove(0);
+			}else if(b.isEmpty() && !a.isEmpty()){
+				res.add(a.get(0));
+				a.remove(0);
 			}
 		}
 		return res;
